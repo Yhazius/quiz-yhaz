@@ -3,6 +3,7 @@ body {
 }
 
 #page-wrap:after {content: "Smartphone Layout";}
+#resp {width: 90%;}
 
 h2 span, section h3{ display: none;}
 body { font-size: xx-large;}

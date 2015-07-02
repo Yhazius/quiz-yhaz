@@ -10,6 +10,10 @@ router.get('/', function(req, res) {
     });
 });
 
+// Autoload de comandos con :quizId
+router.param('quizId', quizController.load);
+
+
 /* GET créditos page */
 router.get('/author', function(req, res) {
     res.render('author');

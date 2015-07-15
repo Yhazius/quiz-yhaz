@@ -88,7 +88,7 @@ exports.create = function(req, res){
             }else{
              // guarda en BD los campos pregunta y respuesta de quiz
                 quiz
-                    .save({fields: ["pregunta", "respuesta"]})
+                    .save({fields: ["pregunta", "respuesta", "tema"]})
                     .then(function(){   res.redirect('/quizes')})
             }  // Redireccion HTTP (URL relativo) listado de preguntas
         }

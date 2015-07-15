@@ -26,7 +26,7 @@ exports.index = function(req, res) {
             order: 'pregunta ASC'
         }).then(function(quizes) {
             res.render('quizes/index.ejs', {
-                quizes: quizes
+                quizes: quizes, errors: []
             });
         }).catch(function(error) {
             next(error);
@@ -34,7 +34,7 @@ exports.index = function(req, res) {
     } else {
         models.Quiz.findAll().then(function(quizes) {
             res.render('quizes/index.ejs', {
-                quizes: quizes
+                quizes: quizes, errors: []
             });
         }).catch(function(error) {
             next(error);
@@ -48,9 +48,8 @@ exports.index = function(req, res) {
 
 exports.show = function(req, res) {
     res.render('quizes/show', {
-        quiz: req.quiz
+        quiz: req.quiz, errors: []
     });
-
 };
 
 // GET /quizes/:id/answer
@@ -62,7 +61,8 @@ exports.answer = function(req, res) {
     }
     res.render('quizes/answer', {
         quiz: req.quiz,
-        respuesta: resultado
+        respuesta: resultado,
+        errors: []
     });
 };
 
@@ -73,16 +73,24 @@ exports.new = function(req, res){
         {pregunta: "Pregunta", respuesta: "Respuesta"}
     );
 
-    res.render('quizes/new', {quiz: quiz});
+    res.render('quizes/new', {quiz: quiz, errors: []});
 };
 
 // GET /quizes/create
 
 exports.create = function(req, res){
-    var quiz = models.Quiz.build (req.body.quiz);
+    var quiz = models.Quiz.build(req.body.quiz);
 
-    // guarda en BD los campos pregunta y respuesta de quiz
-    quiz.save({fields: ["pregunta", "respuesta"]}).then(function(){
-        res.redirect('/quizes');
-    })  // Redireccion HTTP (URL relativo) listado de preguntas
+    quiz.validate().then(
+        function(err){
+            if(err){
+                res.render('quizes/new', {quiz: quiz, errors: err.errors});
+            }else{
+             // guarda en BD los campos pregunta y respuesta de quiz
+                quiz
+                    .save({fields: ["pregunta", "respuesta"]})
+                    .then(function(){   res.redirect('/quizes')})
+            }  // Redireccion HTTP (URL relativo) listado de preguntas
+        }
+    );
 };

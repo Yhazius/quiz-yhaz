@@ -6,7 +6,7 @@ var quizController = require('../controllers/quiz_controller');
 /* GET home page. */
 router.get('/', function(req, res) {
     res.render('index', {
-        title: 'Quiz - El Juego de las Preguntas'
+        title: 'Quiz - El Juego de las Preguntas', errors: []
     });
 });
 
@@ -16,7 +16,7 @@ router.param('quizId', quizController.load);
 
 /* GET créditos page */
 router.get('/author', function(req, res) {
-    res.render('author');
+    res.render('author',{ errors: []});
 });
 
 router.get('/quizes', quizController.index);

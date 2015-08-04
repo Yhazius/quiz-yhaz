@@ -28,9 +28,15 @@ app.use(session());
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 
+//Autologout
+app.use(function (req, res, next) {
+  var tiempo = 120000;
+  req.session.cookie.expires = new Date(Date.now() + tiempo);
+  next();
+});
+
 // Helpers dinamicos
 app.use(function(req, res, next){
-    
     // guardar path en session.redir para despues del login
     if(!req.path.match(/\/login|\/logout/)){
         req.session.redir = req.path;
@@ -75,6 +81,5 @@ app.use(function(err, req, res, next) {
         errors: []
     });
 });
-
 
 module.exports = app;
